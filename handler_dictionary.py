@@ -1,3 +1,5 @@
+import re
+
 def get_dict_with_questions_and_answers(path, encoding):
     question_dict = {}
     file_with_information = open(path, "r", encoding=encoding).read().split('\n\n\n')
