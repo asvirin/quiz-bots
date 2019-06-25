@@ -3,6 +3,8 @@ from telegram import ReplyKeyboardRemove
 import telegram
 import os
 
+import handler_dictionary
+
 SEND_QUESTION, CHECK_ANSWER, SURRENDER = range(3)
 
 def start(bot, update):
