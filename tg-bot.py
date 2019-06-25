@@ -70,7 +70,7 @@ if __name__ == '__main__':
         states={
             SEND_QUESTION: [RegexHandler('Новый вопрос', handle_new_question_request)],
 
-            CHECK_ANSWER: [MessageHandler(Filters.text, handle_solution_attempt)]
+            CHECK_ANSWER: [RegexHandler(Filters.text, handle_solution_attempt)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)])
