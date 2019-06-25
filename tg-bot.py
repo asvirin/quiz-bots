@@ -28,8 +28,6 @@ def handle_new_question_request(bot, update):
     text = random.choice(list(question_dict.keys()))
     r.set(chat_id, text)
     update.message.reply_text(text)
-    
-    return CHECK_ANSWER
 
 def handle_loss(bot, update):
     chat_id = update.message.chat_id
