@@ -30,16 +30,6 @@ def handle_new_question_request(bot, update):
     update.message.reply_text(text)
     
     return SEND_QUESTION
-
-def handle_loss(bot, update):
-    chat_id = update.message.chat_id
-    question = r.get(chat_id).decode('utf8')   
-    text = question_dict[question]
-    right_answer = question_dict[question]
-    update.message.reply_text(right_answer)
-    handle_new_question_request(bot, update)
-    
-    return SEND_QUESTION
     
 def handle_solution_attempt(bot, update):
     chat_id = update.message.chat_id
@@ -47,10 +37,17 @@ def handle_solution_attempt(bot, update):
     user_message = update.message.text
     
     if question is None:
-        update.message.reply_text('Задайте вопрос')
+        update.message.reply_text('Ты ничего не спрашивал раньше. Задайте вопрос')
+    elif user_message == 'Сдаться':
+        right_answer = question_dict[question]
+        update.message.reply_text(right_answer)
+        handle_new_question_request(bot, update)
+        return SEND_QUESTION
+    
     elif user_message in question_dict[question]:
         update.message.reply_text('Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»')
         return SEND_QUESTION
+    
     else:
         update.message.reply_text('Не правильно! Думай дальше!')   
 
@@ -75,8 +72,6 @@ if __name__ == '__main__':
 
         states={
             SEND_QUESTION: [RegexHandler('Новый вопрос', handle_new_question_request)],
-            
-            SURRENDER: [RegexHandler('Сдаться', handle_loss)],
 
             CHECK_ANSWER: [MessageHandler(Filters.text, handle_solution_attempt)]
         },
