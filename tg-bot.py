@@ -4,6 +4,7 @@ import telegram
 import os
 import random
 import redis
+from functools import partial
 
 import handler_dictionary
 
@@ -77,11 +78,11 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            SEND_QUESTION: [RegexHandler('Новый вопрос', handle_new_question_request)],
+            SEND_QUESTION: [RegexHandler('^Новый вопрос$', partial(handle_new_question_request, r)],
             
-            SURRENDER: [RegexHandler('Сдаться', handle_loss)],
+            SURRENDER: [RegexHandler('^Сдаться$', partial(handle_loss, r)],
 
-            CHECK_ANSWER: [MessageHandler(Filters.text, handle_solution_attempt)]
+            CHECK_ANSWER: [MessageHandler(Filters.text, partial(handle_solution_attempt, r)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)])
