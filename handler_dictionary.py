@@ -2,7 +2,8 @@ import re
 
 def get_dict_with_questions_and_answers(path, encoding):
     question_dict = {}
-    file_with_information = open(path, "r", encoding=encoding).read().split('\n\n\n')
+    file = os.path.dirname(path)
+    file_with_information = open(file, "r", encoding=encoding).read().split('\n\n\n')
     for part in file_with_information:
         question_with_answer = part.split('\n\n')
         for text in question_with_answer:
