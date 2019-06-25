@@ -81,8 +81,8 @@ if __name__ == '__main__':
             SURRENDER: [RegexHandler('^Сдаться$', handle_loss, r)],
 
             CHECK_ANSWER: 
-            [RegexHandler('^Новый вопрос$', handle_new_question_request)],
-            [MessageHandler(Filters.text, handle_solution_attempt, r)]
+            [RegexHandler('^Новый вопрос$', handle_new_question_request),
+                MessageHandler(Filters.text, handle_solution_attempt, r)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)])
