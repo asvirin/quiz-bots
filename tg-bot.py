@@ -29,16 +29,6 @@ def handle_new_question_request(bot, update):
     r.set(chat_id, text)
     update.message.reply_text(text)
     
-    return SEND_QUESTION
-
-def handle_loss(bot, update):
-    chat_id = update.message.chat_id
-    question = r.get(chat_id).decode('utf8')   
-    text = question_dict[question]
-    right_answer = question_dict[question]
-    update.message.reply_text(right_answer)
-    handle_new_question_request(bot, update)
-    
 def handle_solution_attempt(bot, update):
     chat_id = update.message.chat_id
     question = r.get(chat_id).decode('utf8')
@@ -54,7 +44,6 @@ def handle_solution_attempt(bot, update):
     
     elif user_message in question_dict[question]:
         update.message.reply_text('Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»')
-        return SEND_QUESTION
     
     else:
         update.message.reply_text('Не правильно! Думай дальше!')   
