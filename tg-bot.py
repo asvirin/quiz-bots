@@ -8,7 +8,7 @@ import telegram
 
 import handler_dictionary
 
-SEND_QUESTION, SURRENDER, CHECK_ANSWER = range(3)
+SEND_QUESTION, CHECK_ANSWER = range(2)
 
 def start(bot, update):
     custom_keyboard = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
@@ -80,8 +80,6 @@ if __name__ == '__main__':
 
         states={
             SEND_QUESTION: [RegexHandler('Новый вопрос', handle_new_question_request)],
-            
-            SURRENDER: [RegexHandler('Сдаться', handle_loss)],
 
             CHECK_ANSWER: [MessageHandler(Filters.text, handle_solution_attempt)]
         },
