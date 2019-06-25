@@ -31,11 +31,16 @@ def handle_new_question_request(bot, update):
 
 def handle_loss(bot, update):
     chat_id = update.message.chat_id
-    question = r.get(chat_id).decode('utf8')    
+    question = r.get(chat_id).decode('utf8')   
+    print(question, 1)
     text = question_dict[question]
+    print(text, 2)
     right_answer = question_dict[question]
+    print(right_answer, 3)
     update.message.reply_text(right_answer)
+    print(4)
     handle_new_question_request(bot, update)
+    print(5)
     
 def handle_solution_attempt(bot, update):
     chat_id = update.message.chat_id
