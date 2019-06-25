@@ -2,6 +2,8 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Conve
 from telegram import ReplyKeyboardRemove
 import telegram
 import os
+import random
+import redis
 
 import handler_dictionary
 
