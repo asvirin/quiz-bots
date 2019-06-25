@@ -2,8 +2,8 @@
 ### Автор проекта: Алексей Свирин, телеграм — [@svirin](https://telegram.me/svirin)
 ### Цель проекта: создание прототипов ботов-викторин для мессенджера Телеграм и социальной сети ВКонтакте
 
-#Прототипы
-[Бот в Телеграме](https://telegram.me/@speech_recognition_dvmn_bot)
+# Прототипы
+[Бот в Телеграме](https://telegram.me/@speech_recognition_dvmn_bot)  
 [Бот в Вконтакте](https://vk.com/public183166802)
 
 # Как установить
