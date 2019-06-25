@@ -8,7 +8,7 @@ from functools import partial
 
 import handler_dictionary
 
-SEND_QUESTION, CHECK_ANSWER, SURRENDER = range(3)
+SEND_QUESTION, SURRENDER, CHECK_ANSWER = range(3)
 
 def start(bot, update):
     custom_keyboard = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
@@ -56,9 +56,8 @@ def handle_solution_attempt(bot, update):
     
     else:
         update.message.reply_text('Не правильно! Думай дальше!')   
-    
 
-def main():
+if __name__ == '__main__':
     redis_host = os.environ['redis_host']
     redis_port = os.environ['redis_port']
     redis_password = os.environ['redis_password']
@@ -93,6 +92,3 @@ def main():
 
     updater.idle()
 
-
-if __name__ == '__main__':
-    main()
