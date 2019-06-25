@@ -1,14 +1,9 @@
-import os
-import random
-import redis
-
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler
 from telegram import ReplyKeyboardRemove
 import telegram
+import os
 
-import handler_dictionary
-
-SEND_QUESTION, CHECK_ANSWER = range(2)
+SEND_QUESTION, CHECK_ANSWER, SURRENDER = range(3)
 
 def start(bot, update):
     custom_keyboard = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
@@ -20,8 +15,16 @@ def start(bot, update):
 def cancel(bot, update):
     user = update.message.from_user
     update.message.reply_text('Пока!', reply_markup=ReplyKeyboardRemove())
-    
     return ConversationHandler.END
+    
+def handle_loss(bot, update):
+    chat_id = update.message.chat_id
+    question = r.get(chat_id).decode('utf8')   
+    text = question_dict[question]
+    right_answer = question_dict[question]
+    update.message.reply_text(right_answer)
+    handle_new_question_request(bot, update)
+    
     
 def handle_new_question_request(bot, update):
     chat_id = update.message.chat_id
@@ -29,26 +32,28 @@ def handle_new_question_request(bot, update):
     r.set(chat_id, text)
     update.message.reply_text(text)
     
+    return CHECK_ANSWER
+    
 def handle_solution_attempt(bot, update):
     chat_id = update.message.chat_id
     question = r.get(chat_id).decode('utf8')
     user_message = update.message.text
-    
     if question is None:
-        update.message.reply_text('Ты ничего не спрашивал раньше. Задайте вопрос')
+        update.message.reply_text('Задайте вопрос')
     elif user_message == 'Сдаться':
         right_answer = question_dict[question]
         update.message.reply_text(right_answer)
         handle_new_question_request(bot, update)
-        return SEND_QUESTION
-    
+        
     elif user_message in question_dict[question]:
         update.message.reply_text('Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»')
+        return SEND_QUESTION
     
     else:
         update.message.reply_text('Не правильно! Думай дальше!')   
+    
 
-if __name__ == '__main__':
+def main():
     redis_host = os.environ['redis_host']
     redis_port = os.environ['redis_port']
     redis_password = os.environ['redis_password']
@@ -69,13 +74,22 @@ if __name__ == '__main__':
 
         states={
             SEND_QUESTION: [RegexHandler('Новый вопрос', handle_new_question_request)],
+            
+            SURRENDER: [RegexHandler('Сдаться', handle_loss)],
 
-            CHECK_ANSWER: [RegexHandler(Filters.text, handle_solution_attempt)]
+            CHECK_ANSWER: [MessageHandler(Filters.text, handle_solution_attempt)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)])
     
     dp.add_handler(conv_handler)
+    
+    dp.add_error_handler(error)
 
     updater.start_polling()
+
     updater.idle()
+
+
+if __name__ == '__main__':
+    main()
