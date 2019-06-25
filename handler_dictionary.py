@@ -3,7 +3,7 @@ import os
 
 def get_dict_with_questions_and_answers(path, encoding):
     question_dict = {}
-    file = os.path.dirname(path)
+    file = os.path.abspath(path)
     file_with_information = open(file, "r", encoding=encoding).read().split('\n\n\n')
     for part in file_with_information:
         question_with_answer = part.split('\n\n')
