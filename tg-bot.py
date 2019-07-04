@@ -64,8 +64,8 @@ if __name__ == '__main__':
     r = redis.Redis(host=redis_host, port=redis_port, password=redis_password, db=redis_db)
     
     path_to_file = os.environ['PATH_TO_FILE']
-    encoding_file = os.environ['ENCODING_FILE']
-    question_dict = handler_dictionary.get_dict_with_questions_and_answers(path_to_file, encoding_file)
+    file_encoding = os.environ['FILE_ENCODING']
+    question_dict = handler_dictionary.get_dict_with_questions_and_answers(path_to_file, file_encoding)
     
     telegram_token = os.environ['TELEGRAM_TOKEN']
     updater = Updater(telegram_token)
