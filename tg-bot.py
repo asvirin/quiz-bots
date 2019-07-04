@@ -9,9 +9,9 @@ import handler_dictionary
 from enum import Enum, auto
 
 class function(Enum):
-     SEND_QUESTION = auto()
-     SURRENDER = auto()
-     CHECK_ANSWER = auto()
+    SEND_QUESTION = auto()
+    SURRENDER = auto()
+    CHECK_ANSWER = auto()
 
 def start(bot, update):
     custom_keyboard = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
