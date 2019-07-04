@@ -34,9 +34,9 @@ def handle_loss(bot, update):
     handle_new_question_request(bot, update)
     
     
-def handle_new_question_request(bot, update):
+def handle_new_question_request(bot, update, dict_with_question):
     chat_id = update.message.chat_id
-    text = random.choice(list(question_dict.keys()))
+    text = random.choice(list(dict_with_question.keys()))
     r.set(chat_id, text)
     update.message.reply_text(text)
     
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         entry_points=[CommandHandler('start', start)],
 
         states={
-            function.SEND_QUESTION: [RegexHandler('^Новый вопрос$', handle_new_question_request)],
+            function.SEND_QUESTION: [RegexHandler('^Новый вопрос$', handle_new_question_request, question_dict)],
             
             function.SURRENDER: [RegexHandler('^Сдаться$', handle_loss, r)],
 
