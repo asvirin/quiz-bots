@@ -6,15 +6,19 @@ import random
 import redis
 
 import handler_dictionary
+from enum import Enum, auto
 
-SEND_QUESTION, SURRENDER, CHECK_ANSWER = range(3)
+class function(Enum):
+     SEND_QUESTION = auto()
+     SURRENDER = auto()
+     CHECK_ANSWER = auto()
 
 def start(bot, update):
     custom_keyboard = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
     reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard)
     update.message.reply_text('Привет, я бот для викторин!', reply_markup=reply_markup)
     
-    return SEND_QUESTION
+    return function.SEND_QUESTION
 
 def cancel(bot, update):
     user = update.message.from_user
@@ -36,7 +40,7 @@ def handle_new_question_request(bot, update):
     r.set(chat_id, text)
     update.message.reply_text(text)
     
-    return CHECK_ANSWER
+    return function.CHECK_ANSWER
     
 def handle_solution_attempt(bot, update):
     chat_id = update.message.chat_id
@@ -51,7 +55,7 @@ def handle_solution_attempt(bot, update):
         
     elif user_message in question_dict[question]:
         update.message.reply_text('Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»')
-        return SEND_QUESTION
+        return function.SEND_QUESTION
     
     else:
         update.message.reply_text('Не правильно! Думай дальше!')   
@@ -76,11 +80,11 @@ if __name__ == '__main__':
         entry_points=[CommandHandler('start', start)],
 
         states={
-            SEND_QUESTION: [RegexHandler('^Новый вопрос$', handle_new_question_request)],
+            function.SEND_QUESTION: [RegexHandler('^Новый вопрос$', handle_new_question_request)],
             
-            SURRENDER: [RegexHandler('^Сдаться$', handle_loss, r)],
+            function.SURRENDER: [RegexHandler('^Сдаться$', handle_loss, r)],
 
-            CHECK_ANSWER: 
+            function.CHECK_ANSWER: 
             [RegexHandler('^Новый вопрос$', handle_new_question_request),
                 MessageHandler(Filters.text, handle_solution_attempt, r)]
         },
