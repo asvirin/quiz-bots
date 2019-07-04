@@ -57,17 +57,17 @@ def handle_solution_attempt(bot, update):
         update.message.reply_text('Не правильно! Думай дальше!')   
 
 if __name__ == '__main__':
-    redis_host = os.environ['redis_host']
-    redis_port = os.environ['redis_port']
-    redis_password = os.environ['redis_password']
-    redis_db = os.environ['redis_db']
+    redis_host = os.environ['REDIS_HOST']
+    redis_port = os.environ['REDIS_PORT']
+    redis_password = os.environ['REDIS_PASSWORD']
+    redis_db = os.environ['REDIS_DB']
     r = redis.Redis(host=redis_host, port=redis_port, password=redis_password, db=redis_db)
     
-    path_to_file = os.environ['path_to_file']
-    encoding_file = os.environ['encoding_file']
+    path_to_file = os.environ['PATH_TO_FILE']
+    encoding_file = os.environ['ENCODING_FILE']
     question_dict = handler_dictionary.get_dict_with_questions_and_answers(path_to_file, encoding_file)
     
-    telegram_token = os.environ['telegram_token']
+    telegram_token = os.environ['TELEGRAM_TOKEN']
     updater = Updater(telegram_token)
     
     dp = updater.dispatcher
