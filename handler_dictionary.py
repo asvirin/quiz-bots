@@ -5,7 +5,8 @@ def get_dict_with_questions_and_answers(path, encoding):
     question_dict = {}
     file = os.path.abspath(path)
     
-    with open(file, 'r', encoding=encoding) as file_with_information:
+    with open(file, 'r', encoding=encoding) as f:
+        file_with_information = f.read()
         file_with_information = file_with_information.split('\n\n\n')
 
     for part in file_with_information:
