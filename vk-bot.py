@@ -38,7 +38,7 @@ def handle_new_question_request(event, vk_api, r, dict_with_question):
     
     send_message(user_id, text, vk_api)  
     
-def handle_loss(event, vk_api r, dict_with_question):
+def handle_loss(event, vk_api, r, dict_with_question):
     user_id=event.user_id
     question = r.get(user_id).decode('utf8')    
     text = dict_with_question[question]
