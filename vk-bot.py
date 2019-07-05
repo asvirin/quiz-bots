@@ -84,6 +84,6 @@ if __name__ == "__main__":
             elif event.text == "Новый вопрос":
                 handle_new_question_request(event, vk_api, r, question_dict)
             elif event.text == "Сдаться":
-                handle_loss(event, vk_api, r, dict_with_question)
+                handle_loss(event, vk_api, r, question_dict)
             else:
                 handle_solution_attempt(event, vk_api, r, question_dict)
