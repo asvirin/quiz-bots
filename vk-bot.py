@@ -6,6 +6,7 @@ import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
+from functools import partial
 
 import handler_dictionary
 
@@ -30,29 +31,29 @@ def send_message(user_id, text, vk_api):
         message=text,
         random_id=random.randint(1,1000)) 
 
-def handle_new_question_request(event, vk_api):
+def handle_new_question_request(event, vk_api, r, dict_with_question):
     user_id=event.user_id
-    text = random.choice(list(question_dict.keys()))
+    text = random.choice(list(dict_with_question.keys()))
     r.set(user_id, text)
     
     send_message(user_id, text, vk_api)  
     
-def handle_loss(event, vk_api):
+def handle_loss(event, vk_api r, dict_with_question):
     user_id=event.user_id
     question = r.get(user_id).decode('utf8')    
-    text = question_dict[question]
+    text = dict_with_question[question]
     
     send_message(user_id, text, vk_api)
-    handle_new_question_request(event, vk_api)
+    handle_new_question_request(event, vk_api, r, dict_with_question)
     
     
-def handle_solution_attempt(event, vk_api):
+def handle_solution_attempt(event, vk_api, r, dict_with_question):
     user_id=event.user_id
     question = r.get(user_id).decode('utf8')
     user_message = event.text
     if question is None:
         text = 'Задайте вопрос'
-    elif user_message in question_dict[question]:
+    elif user_message in dict_with_question[question]:
         text = 'Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»'
     else:
         text = 'Не правильно! Думай дальше!'
@@ -81,8 +82,8 @@ if __name__ == "__main__":
             if event.text == "Начать":
                 handle_start_conversation(event, vk_api)
             elif event.text == "Новый вопрос":
-                handle_new_question_request(event, vk_api)
+                handle_new_question_request(event, vk_api, r, question_dict)
             elif event.text == "Сдаться":
-                handle_loss(event, vk_api)
+                handle_loss(event, vk_api, r, dict_with_question)
             else:
-                handle_solution_attempt(event, vk_api)
+                handle_solution_attempt(event, vk_api, r, question_dict)
